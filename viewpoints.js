@@ -4,4 +4,4 @@ export function recordInDeck(record,deck,records=[]){
  if(record.group!=='cable')return false;
  return [record.from,record.to].some(key=>{if(!key)return false;const matches=records.filter(r=>r.group!=='cable'&&(r.id===key||r.tag===key));return matches.length===1&&matches[0].deck===deck;});
 }
-export function supportedBackupKeys(source,revision,previousRevision){return [source+'|'+revision,...(previousRevision?[source+'|'+previousRevision]:[])];}
+export function supportedBackupKeys(source,revision,previousRevision){const prior=Array.isArray(previousRevision)?previousRevision:previousRevision?[previousRevision]:[];return [source+'|'+revision,...prior.map(r=>source+'|'+r)];}

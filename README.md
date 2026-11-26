@@ -6,6 +6,10 @@ Static web app for monitoring EIT supports, equipment installation and cable pul
 
 Serve this directory over HTTP, then open `index.html`. On GitHub Pages, use **Mở mô hình** to open the supplied local `dda-model.json.gz` file if it is not hosted alongside the app. Model processing happens in the browser.
 
+## Model layers
+
+MISC geometry is excluded from the 3D asset. Structure and primary piping meshes are taken from the original FBX, with 10 mm and 5 mm vertex clustering respectively for background rendering. EIT renders opaque gray-white. Structure and piping use translucent materials, with visibility switches and a background opacity slider (12% by default). Model selection uses a white outline. Table status colors remain independent of model colors.
+
 ## Viewpoints and support families
 
 The model excludes `DDO-VOL-PTSCMC-today.RVM`. Support EIT contains 800 records, including 251 LADDERSUP and 286 TRAYSUP assemblies. Each STRUCTURE assembly is counted once, with its component meshes linked to the same record.
