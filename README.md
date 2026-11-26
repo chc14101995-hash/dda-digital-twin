@@ -6,6 +6,14 @@ Static web app for monitoring EIT supports, equipment installation and cable pul
 
 Serve this directory over HTTP, then open `index.html`. On GitHub Pages, use **Mở mô hình** to open the supplied local `dda-model.json.gz` file if it is not hosted alongside the app. Model processing happens in the browser.
 
+## Viewpoints and support families
+
+The model excludes `DDO-VOL-PTSCMC-today.RVM`. Support EIT contains 800 records, including 251 LADDERSUP and 286 TRAYSUP assemblies. Each STRUCTURE assembly is counted once, with its component meshes linked to the same record.
+
+Use **Viewpoint / Sàn** to select WSP, MD, CD, SCD, or Jacket (JK); use the angle selector for isometric, plan, front, or side views. **Chỉ sàn đang chọn** hides other decks. The table and KPIs follow the selected deck. Decks come from source hierarchy names; objects without a deck name use their elevation.
+
+Original record IDs are preserved. The app can restore local progress or JSON backups from the prior model revision.
+
 ## Workflow
 
 1. Load a converted model. NWD is not a browser format; export FBX from Navisworks first, preserving the hierarchy.
@@ -14,7 +22,7 @@ Serve this directory over HTTP, then open `index.html`. On GitHub Pages, use **M
 4. Add cable schedule rows using **+ Tuyến cáp**, or import CSV with `group=cable`, `total` in metres, and `done` as pulled metres. Cable lengths and routes are not inferred from supports or trays.
 5. Export JSON after each working session. Data is stored in localStorage on the current browser and origin; it does not synchronize between users or devices.
 
-CSV columns: `id,tag,group,discipline,zone,total,done,blocked,planned_date,actual_date,from,to,note`. Use ID when a tag occurs more than once. Invalid or ambiguous imports are rejected atomically.
+CSV columns: `id,tag,group,discipline,zone,deck,total,done,blocked,planned_date,actual_date,from,to,note`. Use ID when a tag occurs more than once. Invalid or ambiguous imports are rejected atomically.
 
 KPI = confirmed completed quantity / total baseline quantity. Coverage is shown separately. No percentage is shown before the first progress update. Cable KPI has no baseline until a cable schedule is entered.
 
