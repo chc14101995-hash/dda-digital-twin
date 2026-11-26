@@ -32,3 +32,9 @@ Progress is local to the current browser/origin, with no cross-device collaborat
 ## Hosting and dependencies
 
 Static GitHub Pages main branch root, relative URLs and .nojekyll. models.json lists the ordered model assets. Serve over HTTP for local use. Dependencies are self-hosted Three.js r170, OrbitControls and fflate (MIT). FBXLoader/NURBS modules are conversion tools and are not required by the browser app.
+
+## Floor progress lists (26 Nov)
+
+Choose a floor in the shared viewpoint bar above the KPIs. Four counters show supports not marked Fabricated, Installed or Full welded, plus Blocked. Unknown stages are included in pending counts and displayed separately. Both support groups are included unless Support EIT or Support thang máng is selected in the register group filter. Counters ignore search/status/stage filters; clicking a counter clears search and general status filters, retains the support group, filters the register/3D, and scrolls to the detail list. The stage selector also supports these filters. Independent milestones and blocked overlaps are preserved.
+
+The register export button writes every matching support across all pages, respecting model, floor, group, stage, search and general status. The filename records model/floor/stage; the workbook includes IDs, tags, floor, support group/family and all stage flags. Empty lists disable export. Editing a stage refreshes counters, table and export scope immediately.
