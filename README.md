@@ -1,51 +1,34 @@
-# DDA Digital Twin
+# KMDD Digital Twin
 
-Static web app for monitoring EIT supports, equipment installation and cable pulling. Built for GitHub Pages, with self-hosted Three.js r170 and no runtime CDN dependency.
+Public app: https://chc14101995-hash.github.io/dda-digital-twin/
 
-## Open
+DDA and KMA geometry comes from the 25-Nov-2026 NWD files. Select the model at the top of the page; only the selected model downloads. Each model has separate progress, floor viewpoints and Excel templates. The app has no navigation sidebar. Import and export controls are directly in the header.
 
-Serve this directory over HTTP, then open `index.html`. On GitHub Pages, use **Mở mô hình** to open the supplied local `dda-model.json.gz` file if it is not hosted alongside the app. Model processing happens in the browser.
+Support EIT and Support thang máng are separate groups. LADDERSUP, TRAYSUP/TRAYSUPP and instrumentation tray/ladder support assemblies belong to Support thang máng. Source assemblies are counted once; unnamed assemblies retain unique generated tags. Equipment and its support have separate geometry when the source hierarchy provides both.
 
-## Support updates and Excel
+All MISC branches, including Structure MISC, and VOL/INSU/STUDY model branches are excluded. EIT renders opaque gray-white. Structure and primary piping use actual geometry with 10 mm / 5 mm background vertex clustering and default 12% opacity. The app downloads about 24 MB for the chosen model.
 
-Select a support in 3D or in the register and tick Fabricated, Installed, Full welded or Blocked. Each tick saves immediately to the current browser. Inline register checkboxes work the same way. The white selection outline does not replace the support status color.
+## Fabrication baseline
 
-Model color priority: Blocked = red; Full welded = green; Installed = blue; Fabricated = yellow; no completed milestone = gray-white. Stages are independent and do not automatically tick one another. The main support percentage measures installation; separate totals show each milestone and blocked supports. Existing installation progress is retained.
+Source: https://docs.google.com/spreadsheets/d/1iqw4M3-NDDXI4v6qslT6pfY9Qp3mWfKSgD3RotC7myQ/edit
 
-**Nhập tiến độ** accepts Excel `.xlsx`, CSV and JSON. Use **Tải mẫu Excel** for a workbook containing all 800 supports with their IDs, tags, decks and status columns. TRUE/FALSE, 1/0, Có/Không and X are supported. Blank Excel cells preserve existing values. Matching uses ID, or a unique tag; duplicate IDs and mismatched ID/tag pairs are reported before applying. Up to 50,000 data rows can be read at once; only model supports can receive support milestones. Worksheet selection and Vietnamese headers are supported.
+The 16 DD/KM Equip/Tray deck tabs were read on 26-Nov-2026. Fabricated means FullWeldDate or a later IRN/Painting/Receive date, as confirmed by the user. Shop FullWeldDate sets Fabricated; it does not set site installation or site full weld. Cutting/Fitup alone do not mark fabrication complete.
 
-The preview shows changes, unchanged rows and errors. No rows are written until **Áp dụng** is clicked. Errors block the batch by default; explicitly select **Bỏ qua dòng lỗi** to apply valid rows only. The complete error list can be downloaded as CSV. JSON snapshots preserve unknown stage values and can restore the complete progress state. `.xls` should be saved as `.xlsx` first.
+| Model | Support EIT | Support thang máng | Equipment | Fabricated |
+|---|---:|---:|---:|---:|
+| DDA | 269 | 1056 | 291 | 142 |
+| KMA | 269 | 1179 | 268 | 234 |
 
-## Model layers
+Every fabrication-complete Sheet row was matched to a support in the appropriate model. Exact support names and explicit drawing-type suffix aliases are used. Combined named supports count once. Rows without a completed fabrication date remain unchanged; unmatched rows are recorded in the accompanying reconciliation CSV files. No Sheet data was edited. The baseline is a snapshot, with no automatic live synchronization.
 
-MISC geometry is excluded from the 3D asset. Structure and primary piping meshes are taken from the original FBX, with 10 mm and 5 mm vertex clustering respectively for background rendering. EIT renders opaque gray-white, with the support milestone colors described above. Structure and piping use translucent materials, with visibility switches and a background opacity slider (12% by default). Model selection uses a white outline. Table status colors remain independent of model colors.
+## Updates and colors
 
-## Viewpoints and support families
+Tick Fabricated, Installed, Full welded or Blocked on a selected support or directly in the table. Each tick saves immediately. Stages are independent. Priority: blocked red; full welded green; installed blue; fabricated yellow; otherwise gray-white. A white selection outline preserves the underlying status color. Installation percentage and each stage count are separate.
 
-The model excludes `DDO-VOL-PTSCMC-today.RVM`. Support EIT contains 800 records, including 251 LADDERSUP and 286 TRAYSUP assemblies. Each STRUCTURE assembly is counted once, with its component meshes linked to the same record.
+Import .xlsx, CSV or JSON through Nhập tiến độ. Excel templates include both support groups for the currently selected model. IDs include the model prefix; ambiguous tags, duplicate IDs and ID/tag conflicts are rejected before applying. Blank cells preserve existing values. TRUE/FALSE, 1/0, Có/Không and X are accepted. Up to 50,000 rows; .xls must be saved as .xlsx. Export progress or backups with Xuất tiến độ.
 
-Use **Viewpoint / Sàn** to select WSP, MD, CD, SCD, or Jacket (JK); use the angle selector for isometric, plan, front, or side views. **Chỉ sàn đang chọn** hides other decks. The table and KPIs follow the selected deck. Decks come from source hierarchy names; objects without a deck name use their elevation.
+Progress is local to the current browser/origin, with no cross-device collaboration backend. Existing DDA progress migrates only by unique compatible tag/deck or exact ID. Newer manual changes can override the Sheet fabrication baseline. Export JSON to retain backups. Model assets are gzip streams split into ordered parts; concatenate each model's parts before decoding outside the app.
 
-Original record IDs are preserved. The app can restore local progress or JSON backups from the prior model revision.
+## Hosting and dependencies
 
-## Workflow
-
-1. Load a converted model. NWD is not a browser format; export FBX from Navisworks first, preserving the hierarchy.
-2. Review the inferred support/equipment classification. Object IDs belong to the exported snapshot, and are not Navisworks GUIDs. Check quantities against the approved BOQ.
-3. Select an object and enter completed quantity, discipline, area, dates and notes. Blank progress means unknown; zero means confirmed not started. Each support/equipment record has total 1. Support installation quantity follows its Installed checkbox.
-4. Add cable schedule rows using **+ Tuyến cáp**, or import CSV with `group=cable`, `total` in metres, and `done` as pulled metres. Cable lengths and routes are not inferred from supports or trays.
-5. Export JSON after each working session. Data is stored in localStorage on the current browser and origin; it does not synchronize between users or devices.
-
-CSV columns: `id,tag,group,discipline,zone,deck,total,done,blocked,planned_date,actual_date,from,to,note`. Use ID when a tag occurs more than once. Invalid or ambiguous imports are rejected atomically.
-
-KPI = confirmed completed quantity / total baseline quantity. Coverage is shown separately. No percentage is shown before the first progress update. Cable KPI has no baseline until a cable schedule is entered.
-
-## Scope
-
-This is a construction progress snapshot, not a sensor-connected operational twin. Only exported geometry can be linked in 3D. Geometry hidden in the Navisworks session can be absent. Background geometry may be simplified, as disclosed in each model file. The model file contains technical project data; keep it local unless public hosting is authorized.
-
-## Hosting
-
-GitHub Pages: branch `main`, directory `/`. `.nojekyll` serves assets directly. All application URLs are relative, so the app works under a repository subpath.
-
-Third-party dependency: Three.js r170, MIT; see `vendor/LICENSE-three.txt`. The browser app uses Three.js, OrbitControls and fflate (MIT) for local Excel ZIP import/export. `FBXLoader` and the NURBS helper files are conversion tools.
+Static GitHub Pages main branch root, relative URLs and .nojekyll. models.json lists the ordered model assets. Serve over HTTP for local use. Dependencies are self-hosted Three.js r170, OrbitControls and fflate (MIT). FBXLoader/NURBS modules are conversion tools and are not required by the browser app.

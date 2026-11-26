@@ -1,3 +1,4 @@
+export const isSupport=r=>['support','tray_support'].includes(typeof r==='string'?r:r?.group);
 export const supportFields=['fabricated','installed','full_welded'];
 export const supportLabels={fabricated:'Đã chế tạo',installed:'Đã lắp đặt',full_welded:'Đã hàn full',blocked:'Bị vướng'};
 export function normalizeText(value){return String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase().replace(/[^a-z0-9]/g,'');}
@@ -6,4 +7,4 @@ export function supportStages(r){const stages={fabricated:null,installed:null,fu
 export function patchSupport(r,patch){const out={...r,...supportStages(r)};for(const key of supportFields)if(Object.hasOwn(patch,key)){const value=parseFlag(patch[key]);if(value===undefined)continue;out[key]=value;if(key==='installed')out.done=value===null?null:value?1:0;}if(Object.hasOwn(patch,'blocked')){const value=parseFlag(patch.blocked);if(value!==undefined)out.blocked=value===true;}return out;}
 export function installedProgress(r){const s=supportStages(r);if(s.installed===true)return 1;if(s.installed===false)return 0;return r.done===null||r.done===undefined||r.done===''?null:Number(r.done);}
 export function supportColor(r){if(r.blocked)return 0xef4444;const s=supportStages(r);if(s.full_welded)return 0x22c55e;if(s.installed)return 0x3b82f6;if(s.fabricated)return 0xfacc15;return 0xcbd0d5;}
-export function stageCounts(rows){const data=rows.filter(r=>r.group==='support'),counts={total:data.length,fabricated:0,installed:0,full_welded:0,blocked:0};for(const r of data){const s=supportStages(r);for(const key of supportFields)if(s[key]===true)counts[key]++;if(r.blocked)counts.blocked++;}return counts;}
+export function stageCounts(rows){const data=rows.filter(isSupport),counts={total:data.length,fabricated:0,installed:0,full_welded:0,blocked:0};for(const r of data){const s=supportStages(r);for(const key of supportFields)if(s[key]===true)counts[key]++;if(r.blocked)counts.blocked++;}return counts;}

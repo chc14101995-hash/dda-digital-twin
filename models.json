@@ -1,0 +1,20 @@
+{
+  "models": [
+    {
+      "id": "DDA",
+      "label": "DDA · 25-Nov-2026",
+      "assets": [
+        "dda-25nov-model.part1.gz",
+        "dda-25nov-model.part2.gz"
+      ]
+    },
+    {
+      "id": "KMA",
+      "label": "KMA · 25-Nov-2026",
+      "assets": [
+        "kma-25nov-model.part1.gz",
+        "kma-25nov-model.part2.gz"
+      ]
+    }
+  ]
+}
